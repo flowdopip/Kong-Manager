@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Kong.Master.Presentation.Controllers
+﻿namespace Kong.Master.Presentation.Controllers
 {
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Mvc;
+    using Application.Services.Interfaces;
+
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly IAdminServices adminServices;
+
+        public HomeController(IAdminServices adminServices)
         {
+            this.adminServices = adminServices;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var settings = await this.adminServices.GetServerOptionsAsync().ConfigureAwait(false);
             return View();
         }
 

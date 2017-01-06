@@ -7,11 +7,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Net.Http;
+using Kong.Master.Application.Services.Admin;
+using Kong.Master.Application.Services.Interfaces;
+using Kong.Master.Infrastructure.HttpClient;
 
 namespace Kong.Master.Presentation
 {
     public class Startup
     {
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -36,7 +41,11 @@ namespace Kong.Master.Presentation
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddMvc();
+            services.AddMvc();           
+
+            var kongClient = new RestClient(Configuration["KongAdminUrl"].ToString());
+            services.AddSingleton<IHttpClient, RestClient>(client  => kongClient);
+            services.AddSingleton<IAdminServices, AdminServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,15 +56,7 @@ namespace Kong.Master.Presentation
 
             app.UseApplicationInsightsRequestTelemetry();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+            app.UseExceptionHandler("/Home/Error");
 
             app.UseApplicationInsightsExceptionTelemetry();
 
