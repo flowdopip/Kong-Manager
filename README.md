@@ -1,2 +1,3 @@
 # Kong-Manager
-Manage Mashape Kong Admin API
+UI interface to Manage Mashape Kong Admin API
+Implemented in .NET
