@@ -16,6 +16,8 @@
 
         public async Task<List<Kong.Master.Application.Dto.Api.Apis>> GetAllAsync()
         {
+            await Task.Yield();
+
             var response = this.client.GetAsync("/apis");
 
             return null;

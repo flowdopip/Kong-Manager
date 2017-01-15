@@ -18,9 +18,7 @@
 
         public async Task<Settings> GetServerOptionsAsync()
         {
-            var response = await this.client.GetAsync<Settings>("").ConfigureAwait(false);
-          
-            return await Task.FromResult(new Settings()) ;
+            return await this.client.GetAsync<Settings>("").ConfigureAwait(false);          
         }
     }
 }
